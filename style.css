@@ -1,0 +1,760 @@
+@charset "utf-8";
+
+/* =========================================
+   Modern CSS Reset
+========================================= */
+* {
+    margin: 0;
+    padding: 0;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  img, picture, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+  }
+  
+  body {
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    width: 100%
+  }
+  p, h1, h2, h3, h4, h5, h6 {
+    overflow-wrap: break-word;
+  }
+  input, button, textarea, select {
+    font: inherit;
+    color: inherit;
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+ 
+/* =========================================
+   HEADER (横並びメニュー版)
+========================================= */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  display: flex;
+  justify-content: space-between; /* ロゴを左端、ナビを右端に配置 */
+  align-items: center; /* 縦の真ん中揃え */
+  
+  background-color: rgba(227, 176, 198, 0.8); 
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  
+  padding: 0 40px; /* 左右の余白を少し広めに設定 */
+  height: 80px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.logo img {
+  height: 50px; 
+}
+
+/* --- ヘッダー内のナビゲーション --- */
+.header-nav ul {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px; /* ★ここでメニュー同士のスキマの広さを調整できます */
+  list-style: none;
+}
+
+.header-nav a {
+  text-decoration: none;
+  color: #333; /* 文字の色（ダークグレー） */
+  font-family: serif; 
+  font-size: 16px; 
+  letter-spacing: 0.1em; 
+  transition: opacity 0.3s ease;
+}
+
+/* メニューにマウスを乗せた時のフワッとした動き */
+.header-nav a:hover {
+  opacity: 0.5;
+}
+
+/* =========================================
+   ドロップダウンメニュー（上から下へスライド）
+========================================= */
+/* ★ 1. 親項目（ARCHIVE）を基準点に設定する */
+.has-dropdown {
+  position: relative; 
+}
+
+/* ★ 2. ドロップダウンメニュー本体の設定 */
+.dropdown-menu {
+  position: absolute;
+  /* 親項目のすぐ下ではなく、少しだけ下（+10px）から出るようにして窮屈さをなくす */
+  top: calc(100% + 27px); 
+  left: 50%;
+  transform: translateX(-50%) translateY(-15px); 
+  
+  /* ====================================
+     ★ 魔法の背景設定（すりガラス風）
+  ==================================== */
+  background-color: rgba(255, 255, 255, 0.75); /* 白を少し透明に（0.75＝75%の濃さ） */
+  backdrop-filter: blur(8px); /* 後ろの背景をぼかす */
+
+  min-width: 200px; /* 横幅を少しスマートに */
+  padding: 10px 0; /* ★ここを減らすと、箱全体の上下の余白が小さくなります */
+  border-radius: 8px; /* 角をほんの少し丸くすると柔らかい印象に */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* 影を少し薄く上品に */
+  
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease; 
+  z-index: 200;
+}
+
+/* ★ 3. マウスが乗った時の動き */
+.has-dropdown:hover .dropdown-menu {
+  opacity: 1; 
+  visibility: visible; 
+  transform: translateX(-50%) translateY(0); 
+}
+
+/* --- ドロップダウン内の文字デザイン --- */
+.dropdown-menu li {
+  list-style: none;
+  width: 100%;
+  text-align: center;
+}
+
+.dropdown-menu a {
+  display: block; 
+  /* ====================================
+     ★ 縦のスキマの調整
+  ==================================== */
+  padding: 10px 20px; 
+  font-size: 14px;
+  color: #554C47; 
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ドロップダウン内の文字にマウスを乗せた時 */
+.dropdown-menu a:hover {
+  background-color: rgba(248, 198, 217, 0.8); /* ホバーした時のピンクも少し透明にする */
+  color: #FFFFFF; 
+  opacity: 1; 
+}
+
+/* =========================================
+   スライダー（Swiper）のデザイン
+========================================= */
+/* スライダー全体の大きさ */
+.mySwiper {
+  width: 100%; 
+  aspect-ratio: 1366 / 768; 
+}
+.swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+}
+:root {
+  --swiper-theme-color: #F8C6D9;
+}
+
+
+/* =========================================
+   NEW ITEMS (4列のダミー画像エリア)
+========================================= */
+.new-items-section {
+  padding: 50px 20px; 
+  max-width: 1200px; 
+  margin: 0 auto; 
+}
+
+.items-grid {
+  display: grid; 
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px; 
+}
+
+/* =========================================
+   NEW ITEMS (ホバー切り替え版)
+========================================= */
+/* 枠の基本設定 */
+.dummy-box {
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1; /* 正方形を維持 */
+  overflow: hidden; /* はみ出した部分を隠す */
+  background-color: #F8C6D9; 
+  transition: transform 0.3s ease; 
+}
+
+/* 箱にマウスを乗せた時の動き（全体が少し拡大） */
+.dummy-box:hover {
+  transform: scale(1.05); 
+}
+
+/* 中の画像（2枚共通）の設定 */
+.dummy-box img {
+  position: absolute; 
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 枠に合わせて綺麗にトリミング */
+  transition: opacity 0.4s ease; /* ★フワッと切り替わるアニメーションの秒数 */
+}
+.dummy-box .img-hover {
+  opacity: 0;
+}
+.dummy-box:hover .img-hover {
+  opacity: 1;
+}
+
+.collage-section {
+  padding: 0 20px 50px; 
+  max-width: 1200px; 
+  margin: 0 auto; 
+  text-align: center;
+}
+.collage-image {
+  width: 100%;
+  height: auto; 
+}
+
+/* テキストをまとめる箱（最初は透明にしておく） */
+.item-details {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+  /* ★文字を読みやすくするための半透明のフィルター */
+  /* ここでは、少し暗いフィルターをかけて文字を白く目立たせます */
+  background-color: rgba(0, 0, 0, 0.5); 
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 縦のド真ん中 */
+  align-items: center; /* 横のド真ん中 */
+  text-align: center;
+  
+  opacity: 0; /* 最初は透明（見えない） */
+  transition: opacity 0.4s ease; /* 画像と同じ速度でフワッと出す */
+  z-index: 10; /* 画像よりも手前に表示する */
+}
+
+/* マウスが乗った時にテキストを表示する */
+.dummy-box:hover .item-details {
+  opacity: 1;
+}
+
+.item-name {
+  color: #FFFFFF; /* 文字色を白に */
+  font-family: sans-serif; /* タイトルと同じフォントなど */
+  font-size: 20px;
+  margin-bottom: 10px;
+  letter-spacing: 0.05em;
+  padding: 0 15px; /* テキストが左右のギリギリまで行かないように余白 */
+}
+
+.item-price {
+  color: #FFFFFF;
+  font-family: sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.1em;
+}
+
+/* =========================================
+   VIEW ALL ボタン
+========================================= */
+/* ボタンを中央に配置するための箱 */
+.view-all-wrapper {
+  text-align: center; /* 中央揃え */
+  margin-top: 20px; /* 商品一覧との間の余白 */
+  margin-bottom: 20px; /* 下の余白 */
+}
+
+/* ボタン本体のデザイン */
+.view-all-btn {
+  display: inline-block;
+  background-color: #3A3A3A; /* ダークグレーの背景色 */
+  color: #FFFFFF; /* 文字色（白） */
+  font-family: sans-serif;
+  font-size: 14px; /* 少し小さめにするとプロっぽいです */
+  font-weight: bold; /* 文字を太く */
+  letter-spacing: 0.15em; /* 文字と文字の間に少し隙間を空ける */
+  padding: 18px 80px; /* ★ここで四角の大きさを調整（縦18px、横80pxの余白） */
+  text-decoration: none; /* リンクの下線を消す */
+  transition: background-color 0.3s ease, opacity 0.3s ease; /* ホバー時のフワッとした動き */
+}
+
+/* ボタンにマウスを乗せた時の動き */
+.view-all-btn:hover {
+  background-color: #555555; /* 少し明るいグレーになる */
+}
+
+/* =========================================
+   ITEM CATEGORY (カテゴリースライダー)
+========================================= */
+.category-section {
+  padding-top: 0;
+  max-width: 1400px; /* スライダー全体の最大幅 */
+  margin: 0 auto;
+  text-align: center;
+}
+
+.category-title {
+  font-family: "小塚明朝 Pr6N";
+  font-size: 30px;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.category-circle {
+  background-color: #E8A8BA; 
+  border-radius: 50%;
+  width: 100%;
+  aspect-ratio: 1 / 1; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 10px; 
+}
+.category-circle img {
+  width: 85%; 
+  height: auto;
+  object-fit: contain;
+}
+
+.category-swiper {
+  padding-bottom: 30px; 
+}
+/* レール（下の薄い線） */
+.category-swiper .swiper-scrollbar {
+  background-color: #e0e0e0;
+  height: 6px; 
+}
+/* 動くバー（こげ茶色） */
+.category-swiper .swiper-scrollbar-drag {
+  background-color: #4A3E39; 
+}
+
+
+.lookbook-section {
+  padding: 60px 0;
+  max-width: 1200px; 
+  margin: 0 auto;
+}
+
+.lookbook-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2列に並べる */
+  gap: 20px; /* 箱と箱のスキマ */
+}
+
+/* 画像を入れる「枠」の設定 */
+.lookbook-item {
+  display: block; 
+  width: 100%;
+  aspect-ratio: 2 / 1; 
+  overflow: hidden;
+}
+
+/* 中の「画像」の設定 */
+.lookbook-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+  transition: transform 0.3s ease; 
+}
+.lookbook-item:hover img {
+  transform: scale(1.05); 
+}
+
+
+
+/* =========================================
+   MARQUEE (流れるテキストエリア)
+========================================= */
+.marquee-section {
+  background-color: #554C47; 
+  padding: 15px 0; 
+  overflow: hidden;
+  width: 100%;
+}
+
+.marquee-track {
+  display: flex;
+  width: fit-content;
+  animation: marquee-scroll 25s linear infinite; 
+}
+.marquee-content {
+  display: flex;
+}
+.marquee-text {
+  color: #FFFFFF; /* 文字色を白に */
+  font-style: italic; /* 少し斜めにする */
+  font-size: 30px;
+  white-space: nowrap; /* テキストを改行させない */
+  padding-right: 35px; /* 文章と文章の間のスキマ */
+}
+
+
+
+/* =========================================
+   アニメーションの動きの指示（キーフレーム）
+========================================= */
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0); /* 最初は元の位置 */
+  }
+  100% {
+    transform: translateX(-50%); 
+  }
+}
+
+
+
+/* =========================================
+   SCRAPBOOK AREA 
+========================================= */
+.scrapbook-section {
+  background-color: #8FD1C3; 
+  padding: 60px 20px;
+  overflow: hidden; 
+  width: 100%;
+}
+
+/* --- ノート本体 --- */
+.notebook-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 900px; /* ノートの最大幅 */
+  margin: 0 auto; /* 中央揃え */
+  background-image: url("img/note.png"); /* ノートの背景画像 */
+  background-size: 100% 100%;
+  background-position: center top;
+  background-repeat: no-repeat;
+  aspect-ratio: 1000 / 1400; 
+  
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- 中央のラベルエリア --- */
+.label-container {
+  position: relative;
+  width: 90%; 
+  max-width: 750px; 
+  
+  background-image: url("img/paper1.png"); 
+  background-size: 100% 100%; 
+  background-position: center;
+  background-repeat: no-repeat;
+  
+  aspect-ratio: 1.45 / 1; 
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center; 
+  text-align: center;
+  padding: 14% 12%; 
+  margin: 0 auto; 
+  z-index: 2; 
+  transform: translateY(25px); 
+}
+
+
+
+.workshop-title {
+  font-family: 'Curlz MT';
+  font-size: 45px;
+  color: #333;
+  margin-bottom: 20px;
+  letter-spacing: 0.1em;
+}
+
+.workshop-text {
+  font-family: '小塚明朝 Pr6N';
+  font-size: 16px; 
+  line-height: 2;
+  color: #555;
+}
+
+/* =========================================
+   装飾アイテムの
+========================================= */
+.deco {
+  position: absolute;
+}
+
+/* ドールハウス */
+.house {
+  top: -1%; 
+  left: -10%; 
+  width: 25%; 
+  min-width: 80px;
+  z-index: 5; 
+  animation: sway 4s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+/* クリップ */
+.clip {
+  top: 5%; 
+  right: 15%; 
+  width: 5%;
+  min-width: 20px;
+  z-index: 5;
+  transform: rotate(10deg); 
+}
+
+/* レース */
+.doily {
+  bottom: -5%; 
+  left: -8%;  
+  width: 28%; 
+  min-width: 100px;
+  z-index: -5; 
+}
+
+/* チケット */
+.ticket {
+  bottom: -5%;
+  right: -15%; 
+  width: 35%; 
+  min-width: 130px;
+  z-index: 5; 
+  transform: rotate(-10deg); 
+
+  transform: rotate(-10deg); 
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+.ticket:hover {
+  transform: rotate(-2deg) scale(1.1); 
+}
+
+/* =========================================
+   アニメーションの動きの指示（キーフレーム）
+========================================= */
+@keyframes sway {
+  0% {
+    transform: rotate(0deg); /* まっすぐ */
+  }
+  25% {
+    transform: rotate(4deg); /* 右に4度傾く */
+  }
+  75% {
+    transform: rotate(-4deg); /* 左に4度傾く */
+  }
+  100% {
+    transform: rotate(0deg); /* まっすぐ戻る */
+  }
+}
+
+/* --- タイトルとテキスト --- */
+.snaps-header {
+  text-align: center;
+  width: 100%;
+  margin-top: 200px;
+  margin-bottom: 20px;
+}
+
+.snaps-title {
+  font-family: 'Curlz MT';
+  font-size: 60px; /* 上半分とサイズを揃える */
+  color: #333;
+  margin-bottom: 10px;
+  letter-spacing: 0.1em;
+}
+
+.snaps-text {
+  font-family: '小塚明朝 Pr6N';
+  font-size: 20px; /* 上半分とサイズを揃える */
+  line-height: 1.8;
+  color: #555;
+}
+
+/* --- スライダー（Swiper）の設定 --- */
+.snaps-swiper {
+  width: 100%;
+  padding-top: 40px; 
+  padding-bottom: 60px; 
+}
+
+/* スライド（ポラロイド）のベース設定 */
+.polaroid {
+  display: flex;
+  justify-content: center;
+  transition: transform 0.3s ease; 
+}
+
+.polaroid img {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(3px 5px 8px rgba(0,0,0,0.15)); 
+}
+
+/* ★ 写真を「歪」に散らばらせる（回転 ＋ 上下にズラす） */
+.polaroid-1 { transform: rotate(-8deg) translateY(-20px); } /* 左斜め・上 */
+.polaroid-2 { transform: rotate(6deg) translateY(30px); }  /* 右斜め・下 */
+.polaroid-3 { transform: rotate(-3deg) translateY(10px); }  /* 少し左・少し下 */
+.polaroid-4 { transform: rotate(10deg) translateY(-15px); } /* 大きく右・上 */
+
+/* ホバー時のギミック */
+.polaroid:hover {
+  transform: scale(1.05) rotate(0deg) translateY(-5px);
+  z-index: 10;
+}
+
+.snaps-swiper .swiper-scrollbar {
+  background-color: rgba(255, 255, 255, 0.4); /* バーの背景（半透明の白） */
+  height: 8px; /* バーの太さ */
+  bottom: 0px; 
+}
+.snaps-swiper .swiper-scrollbar-drag {
+  background-color: #554C47; /* 動かす部分の色（テキストと同じこげ茶色） */
+  cursor: pointer;
+}
+
+/* =========================================
+   秘密のラボへの扉
+========================================= */
+.secret-door-section {
+  background-color: #8FD1C3; 
+  padding: 80px 20px; /* 上下の余白（ミントグリーンの面積） */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ボタン全体の設定 */
+.secret-door-btn {
+  position: relative; /* 中の文字や鍵を重ねるための基準点 */
+  display: inline-block;
+  width: 100%;
+  max-width: 500px; /* ラベルの最大サイズ（お好みで調整してください） */
+  transition: transform 0.3s ease;
+}
+
+/* ★ ボタンにマウスを乗せたら、全体がフワッと少し上に浮く */
+.secret-door-btn:hover {
+  transform: translateY(-5px);
+}
+
+/* 1. 下敷きになるラベル画像 */
+.door-bg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 2. 中央のテキスト（絶対位置でド真ん中に配置） */
+.door-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 縦横のド真ん中へ */
+  
+  font-family: '小塚明朝 Pr6N', serif; /* ノート部分と同じ明朝体 */
+  font-size: 24px; /* スマホで見づらい場合は小さくしてください */
+  color: #554C47; /* テキストのこげ茶色 */
+  letter-spacing: 0.1em;
+  white-space: nowrap; /* 文字を改行させない */
+}
+
+/* 3. 上に重なる鍵の画像（絶対位置で右側に配置） */
+.door-key {
+  position: absolute;
+  top: 50%; 
+  right: 5%; /* 右端からの距離 */
+  
+  /* 縦の真ん中にしつつ、最初から少し斜めに傾けておく */
+  transform: translateY(-50%) rotate(15deg); 
+  
+  width: 18%; /* 鍵の大きさ */
+  min-width: 50px;
+  filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.15)); /* 鍵に少し影をつけて立体的に */
+  transition: transform 0.3s ease;
+}
+
+/* ★ マウスを乗せたら、鍵が「カチャッ」と回るギミック */
+.secret-door-btn:hover .door-key {
+  transform: translateY(-50%) rotate(0deg) scale(1.1); /* 傾きをなくして少し大きく */
+}
+
+/* =========================================
+   FOOTER (フッター)
+========================================= */
+.footer {
+  background-color: #8a8a8a; 
+  padding: 50px 40px;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-end; 
+}
+
+.footer-links {
+  list-style: none; 
+  padding: 0;
+  margin: 0;
+  text-align: left; 
+}
+
+.footer-links li {
+  margin-bottom: 12px;
+}
+
+.footer-links li:last-child {
+  margin-bottom: 0;
+}
+
+.footer-links a {
+  color: #F7F5F0; 
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  transition: opacity 0.3s ease;
+}
+
+.footer-links a:hover {
+  opacity: 0.7;
+}
+
+.copyright {
+  text-align: left; 
+  color: #F7F5F0; 
+  font-size: 12px;
+  letter-spacing: 0.1em; 
+  margin-top: 100px;
+  font-family: sans-serif;
+}
+
+.js-fade {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.js-fade.is-fadein {
+  opacity: 1;
+  transform: translateY(0);
+}
